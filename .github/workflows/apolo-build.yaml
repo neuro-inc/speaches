@@ -29,7 +29,7 @@ jobs:
         id: event-suffix
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "suffix=-${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+            echo "suffix=-pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
       - uses: actions/checkout@v4
       - id: meta
