@@ -1,10 +1,14 @@
 name: apolo-build
 on:
   push:
-    branches: ["master", "ui-fixes"]
+    branches: ["master"]
     tags: ['v*']
   pull_request:
-    branches: ["master"]
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/apolo-build.yaml"
   workflow_dispatch:
 env:
   REGISTRY: ghcr.io
