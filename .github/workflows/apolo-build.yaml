@@ -1,12 +1,11 @@
 name: apolo-build
 on:
-  workflow_dispatch:
   push:
-    branches: [master]
-    tags:
-      - 'v*'
+    branches: ["master", "ui-fixes"]
+    tags: ['v*']
   pull_request:
-    branches: [master]
+    branches: ["master"]
+  workflow_dispatch:
 env:
   REGISTRY: ghcr.io
   FULL_IMAGE_NAME: ghcr.io/neuro-inc/speaches
