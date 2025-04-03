@@ -4,11 +4,7 @@ on:
     branches: ["master"]
     tags: ['v*']
   pull_request:
-    paths:
-      - "src/**"
-      - "scripts/**"
-      - "tests/**"
-      - ".github/workflows/apolo-build.yaml"
+    branches: ["master"]
   workflow_dispatch:
 env:
   REGISTRY: ghcr.io
@@ -45,7 +41,7 @@ jobs:
             ${{ env.FULL_IMAGE_NAME }}
           # https://github.com/docker/metadata-action?tab=readme-ov-file#flavor-input
           flavor: |
-            suffix=${{ matrix.tag-suffix}}${{EVENT_SUFFIX}},onlatest=true
+            suffix=${{ matrix.tag-suffix}}${{ env.EVENT_SUFFIX }},onlatest=true
           tags: |
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
             type=semver,pattern={{major}}.{{minor}}
