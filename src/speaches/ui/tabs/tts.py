@@ -25,7 +25,10 @@ def create_tts_tab(config: Config) -> None:
         openai_client = openai_client_from_gradio_req(request, config)
         models = (await openai_client.models.list(extra_query={"task": "text-to-speech"})).data
         model_ids: list[str] = [model.id for model in models]
-        return gr.Dropdown(choices=model_ids, label="Model")
+        default = None
+        if "hexgrad/Kokoro-82M" in model_ids:
+            default = "hexgrad/Kokoro-82M"
+        return gr.Dropdown(choices=model_ids, label="Model", value=default)
 
     async def update_voices_and_language_dropdown(model_id: str | None, request: gr.Request) -> dict:
         params = httpx.QueryParams({"model_id": model_id}) if model_id is not None else None
@@ -119,9 +122,19 @@ def create_tts_tab(config: Config) -> None:
 
         with gr.Column(visible=False) as download_section:
             with gr.Column(visible=False) as lang_voices_section:
-                lang_voices = gr.Radio(choices=[o.value for o in list(PiperDownloadOptions)], label="Language/Voices")
+                lang_voices = gr.Radio(
+                    choices=[o.value for o in list(PiperDownloadOptions)],
+                    label="Language/Voices",
+                    info="Downloading all voices may take a while. We recommend downloading only the voices you need",
+                    value=PiperDownloadOptions.US_ENGLISH_AMY,
+                    interactive=True,
+                )
                 lang_custom = gr.Textbox(
-                    label="Custom Language Glob", placeholder="en/en_US/amy/**/*", visible=False, interactive=True
+                    label="Custom Language Pattern",
+                    info="Use a Glob pattern to specify the voices you want to download from HuggingFace.",
+                    placeholder="en/en_US/amy/**/*",
+                    visible=False,
+                    interactive=True,
                 )
                 lang_voices.change(
                     lambda x: gr.update(visible=x == "Custom"),

@@ -122,7 +122,6 @@ def download_piper_model(allow_patterns: list[str] | None = None, ignore_pattern
             repo_type="model",
             revision=PIPER_REVISION,
             resume_download=True,
-            max_workers=1,
             allow_patterns=allow_patterns,
             ignore_patterns=ignore_patterns,
         )
